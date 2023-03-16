@@ -1,0 +1,45 @@
+html, body {
+    background-color: #BBD6B8;
+    font-family: 'Raleway', sans-serif;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.title {
+    margin-bottom: 40px;
+}
+form {
+    width: 250px;
+    margin-bottom: 20px;
+}
+label {
+    display: inline-block;
+    width: 100%;
+}
+input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 20px;
+    width: 250px;
+    padding: 5px;
+    transition: 0.5s;
+}
+button:hover {
+    cursor: pointer;
+}
+.navbar {
+    background-color: #FAF9F6;
+}
+.navbar-brand {
+    padding-left: 10px;
+}
+input {
+    height: 35px;
+}
+button {
+    margin-top: 20px;
+    width: 250px;
+    padding: 5px;
+}
