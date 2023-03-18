@@ -9,17 +9,3 @@
     height: 510px;
     margin-top: 60px;
 }
-.navbar {
-    background-color: #FAF9F6;
-}
-.navbar-brand {
-    padding-left: 10px;
-}
-input {
-    height: 35px;
-}
-button {
-    margin-top: 20px;
-    width: 250px;
-    padding: 5px;
-}

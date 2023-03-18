@@ -38,8 +38,11 @@ button:hover {
 input {
     height: 35px;
 }
-button {
+.submit-btn {
     margin-top: 20px;
     width: 250px;
     padding: 5px;
+}
+.navbar-toggler {
+    margin-right: 5px;
 }
