@@ -9,9 +9,9 @@ app.get('/', (req, res) => {
     res.render('login');
 })
 
-app.get('/create-account', (req, res) => {
-    res.render('create-account');
-})
+const createAccountRouter = require('./routes/create-account');
+
+app.use('/create-account', createAccountRouter);
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server is running on port 5000');
