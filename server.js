@@ -1,36 +1,24 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
-
-const { Pool } = require("pg");
-const dotenv = require("dotenv");
-dotenv.config();
-
-const connectDb = async () => {
-    try {
-        const pool = new Pool({
-            user: process.env.PGUSER,
-            host: process.env.PGHOST,
-            database: process.env.PGDATABASE,
-            password: process.env.PGPASSWORD,
-            port: process.env.PGPORT,
-        });
-        await pool.connect();
-        console.log("Successfully connected to the database!");
-        await pool.end();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-connectDb()
+const db = require('./db');
 
 app.set('view engine', 'ejs');
 
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
+
 app.use('/public', express.static('public'));
+
 
 app.get('/', (req, res) => {
     res.render('login');
-})
+  });
+
 
 const createAccountRouter = require('./routes/create-account');
 const homeRouter = require('./routes/home');
