@@ -15,8 +15,6 @@ const connectDb = async () => {
             port: process.env.PGPORT,
         });
         await pool.connect();
-        const res = await pool.query('SELECT * FROM users');
-        console.log(res);
         console.log("Successfully connected to the database!");
         await pool.end();
     } catch (error) {
@@ -35,8 +33,10 @@ app.get('/', (req, res) => {
 })
 
 const createAccountRouter = require('./routes/create-account');
+const homeRouter = require('./routes/home');
 
 app.use('/create-account', createAccountRouter);
+app.use('/home', homeRouter);
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server is running on port 5000');
