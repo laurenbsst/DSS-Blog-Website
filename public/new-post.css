@@ -1,0 +1,31 @@
+.main-content-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.form-container {
+    background-color: #f9f9f9;
+    height: 400px;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    border-radius: 5%;
+}
+.main-title {
+    margin-top: 30px;
+}
+.submit-btn {
+    margin-top: 20px;
+    background-color: #BBD6B8;
+    color: black;
+    border: none;
+    transition: 0.5s;
+}
+.submit-btn:hover {
+    background-color: #BBD6B8;
+    color: black;
+    opacity: 0.6
+}
