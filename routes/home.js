@@ -19,4 +19,8 @@ homeRouter.get('/:user_id', (req, res, next) => {
 });
 });
 
+homeRouter.get('/:user_id/new-post', (req, res) => {
+  res.render('new-post');
+});
+
 module.exports = homeRouter;

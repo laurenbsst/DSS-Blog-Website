@@ -21,11 +21,9 @@ app.get('/', (req, res) => {
 
 const createAccountRouter = require('./routes/create-account');
 const homeRouter = require('./routes/home');
-const newPostRouter = require('./routes/new-post');
 
 app.use('/create-account', createAccountRouter);
 app.use('/home', homeRouter);
-app.use('/new-post', newPostRouter);
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server is running on port 5000');

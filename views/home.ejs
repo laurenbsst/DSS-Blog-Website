@@ -35,7 +35,9 @@
         <div class="main-content-box">
           <div class="header">
               <h3 class="main-title">Hello, <%= user.username %> !</h3>
-              <button onclick="location.href = '/new-post'" type="button" class="new-post">New post</button>
+              <a href="<%=user.user_id %>/new-post">
+              <button class="new-post">New post</button>
+              </a>
           </div>
           <h5>My posts</h5>
           <div class="row">
