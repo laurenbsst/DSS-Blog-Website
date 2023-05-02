@@ -28,3 +28,18 @@
     background-color: #FAF9F6;
     border: none;
 }
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.search-btn {
+    height: 35px;
+    width: 35px;
+}
