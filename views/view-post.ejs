@@ -72,10 +72,11 @@
               disabled
             ><%= post.content %></textarea>
           </div>
-          <div class="form-group">
-            <button class="submit-btn" onclick="editPost()">Edit<span class="inline-icon material-symbols-outlined">edit</span></button>
-          </div>
         </form>
+        <div class="form-group post-buttons">
+            <button class="submit-btn" type="button" onclick="editPost()">Edit<span class="inline-icon material-symbols-outlined">edit</span></button>
+            <button class="submit-btn" type="submit">Save</button>
+          </div>
       </div>
     </div>
     <% }) %>
