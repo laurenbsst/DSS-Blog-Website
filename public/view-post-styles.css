@@ -1,0 +1,21 @@
+.view-post-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 1%;
+    background-color: #FAF9F6;
+    width: 500px;
+    height: 510px;
+    margin-top: 60px;
+}
+.post-title {
+    margin-top: 20px;
+}
+.post-content {
+    padding: 30px;
+}
+.inline-icon {
+    vertical-align: -3;
+    font-size: 18px !important;
+    padding-left: 5px;
+}

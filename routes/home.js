@@ -73,4 +73,17 @@ homeRouter.post('/:user_id/search', (req, res, next) => {
 });
 });
 
+homeRouter.get('/:user_id/:post_id', (req, res, next) => {
+  const user_id = req.params.user_id;
+  const post_id = req.params.post_id;
+
+  db.query(`SELECT * FROM posts WHERE user_id = $1 AND post_id = $2`, [user_id, post_id], (err, post_result) => {
+    if (err) {
+      return next(err)
+    }
+   
+  res.render('view-post', {posts: post_result.rows});
+});
+});
+
 module.exports = homeRouter;

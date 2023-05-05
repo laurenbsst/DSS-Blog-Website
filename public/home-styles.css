@@ -14,6 +14,9 @@
 .main-title {
     text-align: center;
 }
+.post-title {
+    margin-top: 10px;
+}
 .new-post {
     width: 150px;
     height: 70px;
@@ -27,6 +30,8 @@
     border-radius: 3%;
     background-color: #FAF9F6;
     border: none;
+    line-height: 20px;      /* height is 2x line-height, so two lines will display */
+    overflow:hidden;
 }
 .search-container {
     display: flex;

@@ -51,13 +51,15 @@
           <div class="row">
             <% posts.forEach(post => { %>
               <div class="col-md-4 col-12 d-flex justify-content-center">
+                <a href="<%=user.user_id %>/<%=post.post_id %>">
                   <button class="blog-post">
                       <div class="button-title">
-                          <h4><%= post.title %></h4>
-                          <p><%= post.content %></p>
+                          <h4 class="post-title"><%= post.title %></h4>
                           <p><%= post.date %></p>
+                          <p><%= post.content %></p>
                       </div>
                   </button>
+                </a>
               </div>
               <% }) %>
           </div>
