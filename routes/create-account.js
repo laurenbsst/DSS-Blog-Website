@@ -4,6 +4,7 @@ const createAccountRouter = express();
 const session = require('express-session');
 const flash = require('express-flash');
 const db = require('../db/index');
+const qrcode = require('qrcode')
 
 createAccountRouter.get('/', (req, res) => {
     res.render('create-account');
@@ -35,21 +36,24 @@ createAccountRouter.post('/create-account', (req, res) => {
             }
         }
     )
- 
-        const secret = speakeasy.generateSecret() //won't be in final code
+
+
+    const secret = speakeasy.generateSecret()
+
+
         
-        db.query( 
-            `INSERT INTO users (username, email, password, secret) 
-            VALUES ($1, $2, $3, $4)
-            RETURNING user_id, password`, [username, email, password, secret.base32], (err, results) => {
-                    if (err){
-                        throw err
-                    }
-                    console.log(results.rows);
-                    req.flash("success", "Account registered. You can now log in")
-                    res.redirect('/')
-                }
-            )
+    db.query( 
+        `INSERT INTO users (username, email, password, secret) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING user_id, password`, [username, email, password, secret.base32], (err, results) => {
+            if (err){
+                throw err
+            }
+            console.log(results.rows);
+            req.flash("success", "Account registered. You can now log in")
+            res.redirect('/')
+        }
+    )
 
 });
 
