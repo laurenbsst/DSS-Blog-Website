@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/public/global-styles.css" />
     <link rel="stylesheet" href="/public/home-styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="../public/form-validation.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Blog - Home</title>
     </head>
     <body>
@@ -35,19 +37,29 @@
         <div class="main-content-box">
           <div class="header">
               <h3 class="main-title">Hello, <%= user.username %> !</h3>
+              <a href="<%=user.user_id %>/new-post">
               <button class="new-post">New post</button>
+              </a>
           </div>
-          <h5>My posts</h5>
+          <div class="search-container">
+            <form action="<%=user.user_id %>/search" method="post">
+              <input type="text" id="search" placeholder="Search for a post..." name="search">
+              <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
+            </form>
+          </div>
+          <h5 id="posts-title">My posts</h5>
           <div class="row">
             <% posts.forEach(post => { %>
               <div class="col-md-4 col-12 d-flex justify-content-center">
+                <a href="<%=user.user_id %>/<%=post.post_id %>">
                   <button class="blog-post">
                       <div class="button-title">
-                          <h4><%= post.title %></h4>
-                          <p><%= post.content %></p>
+                          <h4 class="post-title"><%= post.title %></h4>
                           <p><%= post.date %></p>
+                          <p><%= post.content %></p>
                       </div>
                   </button>
+                </a>
               </div>
               <% }) %>
           </div>
