@@ -68,7 +68,14 @@ tfa.post('/tfa', (req, res) => {
         console.log(verify)   
         
         if(verify){
-            res.send('Success! User Verified')
+            // db.query(`SELECT user_id FROM users WHERE secret = (verify.secret)`, (err, user_result) => {
+                //if(err) {
+                    //return next(err)
+                //}
+                //res.render('home', {users: user_result.rows,});
+                //});
+           // })
+            res.send('/home')
         }
         else{
             res.redirect('/tfa')
