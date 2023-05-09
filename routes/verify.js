@@ -18,7 +18,7 @@ tfa.use(session({
     saveUninitialized: false
 }))
 
-tfa.get('/', (req, res) => {
+tfa.get('/', (req, res, next) => {
     
     db.query(`SELECT secret FROM users`, (req, re) => {
         
@@ -52,7 +52,7 @@ tfa.get('/', (req, res) => {
 //console.log(secret)
 
 
-tfa.post('/tfa', (req, res) => {
+tfa.post('/tfa', (req, res, next) => {
 
     let { code } = req.body
 
@@ -68,21 +68,23 @@ tfa.post('/tfa', (req, res) => {
         console.log(verify)   
         
         if(verify){
-            // db.query(`SELECT user_id FROM users WHERE secret = (verify.secret)`, (err, user_result) => {
-                //if(err) {
-                    //return next(err)
-                //}
-                //res.render('home', {users: user_result.rows,});
-                //});
-           // })
-            res.send('/home')
+             db.query(`SELECT user_id FROM users WHERE secret = $1`, [sec], (err, user_result) => {
+                if(err) {
+                    return next(err)
+                }
+             
+                db.query(`SELECT * FROM posts WHERE user_id = $1`, [user_result], (err, post_result) => {
+                    if(err) {
+                        return next(err)
+                    }
+                res.render('home', {users: user_result.rows, posts: post_result.rows});
+                });
+            })
         }
         else{
             res.redirect('/tfa')
         } 
     })
-    
-    
 })
     
 
