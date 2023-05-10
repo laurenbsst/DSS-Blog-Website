@@ -34,7 +34,7 @@
     <div class="container">
       <div class="create-account-box">
         <h3 class="title">Create an Account</h3>
-        <form>
+        <form action="/create-account" method="POST">
           <label for="username">Username</label>
           <input type="text" name="username" placeholder="johnappleseed123" required>
           <label for="email">Email address</label>
@@ -42,7 +42,7 @@
           <label for="password">Password</label>
           <input type="password" name="password" placeholder="***********" required>
           <label for="confirm-password">Confirm Password</label>
-          <input type="password" name="confirm-password" placeholder="***********">
+          <input type="password" name="confirmpassword" placeholder="***********">
           <div class="form-group">
             <button class="submit-btn" type="submit">Create account</button>
           </div>

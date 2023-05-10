@@ -4,26 +4,29 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
+app.use(express.urlencoded({extended: false}))
 
 app.use('/public', express.static('public'));
 
-
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
     res.render('login');
   });
 
 
 const createAccountRouter = require('./routes/create-account');
 const homeRouter = require('./routes/home');
+const tfa = require('./routes/verify')
+
 
 app.use('/create-account', createAccountRouter);
+app.use('/tfa', tfa)
 app.use('/home', homeRouter);
+
+
+app.post('/create-account', createAccountRouter)
+app.post('/tfa', tfa)
+
+
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server is running on port 5000');
