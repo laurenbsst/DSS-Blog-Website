@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/laurenbsst/DSS-Blog-Website#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "alert": "^5.1.4",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
