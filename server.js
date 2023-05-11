@@ -16,15 +16,16 @@ app.get('/', (req, res, next) => {
 const createAccountRouter = require('./routes/create-account');
 const homeRouter = require('./routes/home');
 const tfa = require('./routes/verify')
-
+const loginRouter = require('./routes/login')
 
 app.use('/create-account', createAccountRouter);
 app.use('/tfa', tfa)
 app.use('/home', homeRouter);
-
+app.use('/login', loginRouter)
 
 app.post('/create-account', createAccountRouter)
 app.post('/tfa', tfa)
+app.post('/login', loginRouter)
 
 
 

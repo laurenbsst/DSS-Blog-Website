@@ -22,7 +22,7 @@ tfa.get('/', (req, res, next) => {
     
     db.query(`SELECT secret FROM users`, (req, re) => {
         
-        sec = re.rows[0].secret
+        sec = re.rows[1].secret
         const otpauthURL = speakeasy.otpauthURL({ secret: sec, label: '2FA-Blog', encoding: 'base32'})
         //console.log(re.rows[0].secret)
         console.log(otpauthURL)
@@ -58,7 +58,7 @@ tfa.post('/tfa', (req, res, next) => {
 
     db.query(`SELECT secret FROM users`, (req, re) => {
         
-        console.log(re.rows[0].secret)
+        console.log(re.rows[1].secret)
 
         verify = speakeasy.totp.verify({
             secret: sec,
@@ -72,13 +72,15 @@ tfa.post('/tfa', (req, res, next) => {
                 if(err) {
                     return next(err)
                 }
-             
-                db.query(`SELECT * FROM posts WHERE user_id = $1`, [user_result], (err, post_result) => {
+                const id = user_result.rows[0].user_id
+                console.log(id)
+                db.query(`SELECT * FROM posts WHERE user_id = $1`, [id], (err, post_result) => {
                     if(err) {
                         return next(err)
                     }
-                res.render('home', {users: user_result.rows, posts: post_result.rows});
+                //res.render('home', {users: id, posts: post_result.rows});
                 });
+                res.redirect('/home/' + id)
             })
         }
         else{
