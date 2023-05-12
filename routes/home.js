@@ -84,7 +84,7 @@ homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
       return next(err)
     }
    
-  res.render('view-post', {posts: post_result.rows});
+  res.render('view-post', {posts: post_result.rows, user_id: user_id});
 });
 });
 
