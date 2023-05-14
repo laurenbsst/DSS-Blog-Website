@@ -15,6 +15,7 @@ homeRouter.get('/:user_id', (req, res, next) => {
       return next(err)
     }
    
+  res.status(200);
   res.render('home', {users: user_result.rows, posts: post_result.rows});
 });
 });
@@ -49,6 +50,7 @@ homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
         return next(err)
       }
 
+    res.status(201);
     alert("New post successfully created!");
     res.redirect('/home/' + user_id);
   });
