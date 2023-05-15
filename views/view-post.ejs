@@ -35,7 +35,8 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg">
-      <a class="navbar-brand" href="/home/<%=user_id%>">Blog</a>
+      <% users.forEach(user => { %>
+      <a class="navbar-brand" href="/home/USER_ID_HERE">Blog</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -50,7 +51,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/home/USER_ID HERE">Home</a>
+            <a class="nav-link" href="/home/USER_ID_HERE">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/">Logout</a>
@@ -60,7 +61,8 @@
     </nav>
     <div class="container">
       <div class="create-account-box">
-        <h3 class="title"><%= post.title %></h3>
+        <h3 class="post-title"><%= post.title %></h3>
+        <p>Posted by: <%= user.username %></p>
         <form>
           <div class="form-group">
             <textarea
@@ -79,6 +81,7 @@
           </div>
       </div>
     </div>
+    <% }) %>
     <% }) %>
   </body>
 </html>

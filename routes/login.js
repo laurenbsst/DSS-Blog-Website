@@ -5,9 +5,6 @@ const flash = require('express-flash');
 
 
 
-loginRouter.get('/', (req, res) => {
-    res.render('login');
-});
 
 loginRouter.use(flash())
 
