@@ -21,11 +21,11 @@ const loginRouter = require('./routes/login')
 app.use('/create-account', createAccountRouter);
 app.use('/tfa', tfa)
 app.use('/home', homeRouter);
-app.use('/login', loginRouter)
+app.use('/', loginRouter)
 
 app.post('/create-account', createAccountRouter)
 app.post('/tfa', tfa)
-app.post('/login', loginRouter)
+app.post('/', loginRouter)
 
 
 
