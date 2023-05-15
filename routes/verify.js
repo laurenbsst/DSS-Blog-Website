@@ -10,8 +10,8 @@ const db = require('../db/index');
 var basicAuth = require('express-basic-auth')
 
 
-var sec;
-var verify;
+var sec = null;
+var verify = false;
 var id;
 var loggedin = false;
 
@@ -25,9 +25,15 @@ tfa.use(session({
     saveUninitialized: false
 }))
 
+loginRouter.get('/', (req, res) => {
+    verify = false;
+    res.render('login');
+    console.log(verify)
+});
+
 
 loginRouter.post('/', (req, res, next) => {
-    
+
 
     let { username, password } = req.body
 
@@ -53,14 +59,10 @@ loginRouter.post('/', (req, res, next) => {
             
 
                 if (username == user && password == pass){
-                    loggedin = true;
-                    console.log(loggedin)
                     res.redirect('/tfa')
                     res.end()
                 }
                 else {
-                    loggedin = false;
-                    console.log(loggedin)
                     res.redirect('/')
                     res.end()
                 }
@@ -73,7 +75,7 @@ loginRouter.post('/', (req, res, next) => {
 
 
 tfa.get('/', (req, res, next) => {
-    
+
     console.log(id)
     db.query(`SELECT secret FROM users WHERE user_id = $1`, [id], (req, re) => {
         
@@ -89,16 +91,9 @@ tfa.get('/', (req, res, next) => {
         qrcode.toDataURL(otpauthURL, function(err, data) {
             //console.log(data)  
             
-            res.render('tfa', { qr: data });
-                   
-        })    
-
-        
-        //if (err) {
-        //  throw err
-    
-    })    //}  
-    
+            res.render('tfa', { qr: data });          
+        })   
+    })     
 });
 
 
@@ -136,7 +131,6 @@ tfa.post('/tfa', (req, res, next) => {
                             return next(err)
                         }
                     });
-                    //res.render('home');
                     res.redirect('/home/' + id)
                 })
                 
@@ -147,5 +141,123 @@ tfa.post('/tfa', (req, res, next) => {
         }
     })
 })
+
+homeRouter.get('/:user_id', (req, res, next) => {
+    if(verify){
+        const user_id = req.params.user_id;
+        db.query(`SELECT * FROM users WHERE user_id = $1`, [user_id], (err, user_result) => {
+        if (err) {
+            return next(err)
+        }
+            
+        db.query(`SELECT * FROM posts WHERE user_id = $1`, [user_id], (err, post_result) => {
+        if (err) {
+            return next(err)
+        }
+            
+        res.status(200);
+        res.render('home', {users: user_result.rows, posts: post_result.rows});
+    });
+    });
+    }
+    else {
+        res.redirect('/')
+    }
+});
+
+homeRouter.get('/:user_id/new-post', (req, res, next) => {
+    if(verify) {
+        const user_id = req.params.user_id;
+        db.query(`SELECT * FROM users WHERE user_id = $1`, [user_id], (err, user_result) => {
+        if (err) {
+            return next(err)
+        }
+        res.render('new-post', {users: user_result.rows});
+        });
+    }
+    else {
+        res.redirect('/')
+    }
+});
+
+
+homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
+
+    if(verify){
+        const title = req.body.title;
+        const content = req.body.content;
+        const user_id = req.params.user_id;
+    
+        db.query(`SELECT * FROM users WHERE user_id = $1`, [user_id], (err, user_result) => {
+        if (err) {
+            return next(err)
+        }
+    
+        db.query(`INSERT INTO "posts" ("title", "content", "user_id") VALUES ('${title}', '${content}', '${user_id}')`, (err) => {
+        if(err) {
+            return next(err)
+        }
+    
+        db.query(`SELECT * FROM posts WHERE user_id = $1`, [user_id], (err, post_result) => {
+            if (err) {
+            return next(err)
+            }
+    
+        res.status(201);
+        alert("New post successfully created!");
+        res.redirect('/home/' + user_id);
+        });
+    });
+    });
+    }
+    else {
+        res.redirect('/')
+    }
+});
+
+homeRouter.post('/:user_id/search', (req, res, next) => {
+    if(verify) {
+        const user_id = req.params.user_id;
+        const search = req.body.search;
+    
+        var first_char = search.charAt(0);
+    
+        db.query(`SELECT * FROM users WHERE user_id = $1`, [user_id], (err, user_result) => {
+        if (err) {
+            return next(err)
+        }
+    
+        db.query(`SELECT * FROM posts WHERE title LIKE '${first_char}%'`, (err, post_result) => {
+        if(err) {
+            return next(err)
+        }
+        res.render('search-results', {users: user_result.rows, posts: post_result.rows, search: search});
+        });
+    });
+    }
+    else {
+        res.redirect('/')
+    }
+});
+  
+homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
+    if(verify){
+    const user_id = req.params.user_id;
+    const post_id = req.params.post_id;
+  
+    db.query(`SELECT * FROM posts WHERE user_id = $1 AND post_id = $2`, [user_id, post_id], (err, post_result) => {
+      if (err) {
+        return next(err)
+      }
+     
+    res.render('view-post', {posts: post_result.rows, user_id: user_id});
+    });
+    }
+    else {
+        res.redirect('/')
+    }
+});
+
+
 
 module.exports = tfa;
