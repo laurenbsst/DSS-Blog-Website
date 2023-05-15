@@ -18,7 +18,7 @@ function encryptPassword(plainText, salt)
 
 function verifyPassword(enteredPassword, storedPassword, storedSalt)
 {
-    return enteredPassword(encryptPassword(enteredPassword, storedSalt) === storedPassword);
+    return encryptPassword(enteredPassword, storedSalt) === storedPassword;
 }
 
 module.exports = {generateSalt, encryptPassword, verifyPassword}

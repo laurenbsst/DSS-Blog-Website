@@ -52,7 +52,7 @@ createAccountRouter.post('/create-account', (req, res) => {
 
     db.query( 
         `INSERT INTO users (username, email, password, salt, secret) 
-        VALUES ($1, $2, $3, $4)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING user_id, password`, [username, email, encryptedPassword, salt, secret.base32], (err, results) => {
             if (err){
                 throw err
