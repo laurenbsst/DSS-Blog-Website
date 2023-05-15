@@ -12,7 +12,7 @@ app.use('/public', express.static('public'));
 
 
 const createAccountRouter = require('./routes/create-account');
-const homeRouter = require('./routes/home');
+const homeRouter = require('./routes/verify');
 const tfa = require('./routes/verify')
 const loginRouter = require('./routes/login')
 
