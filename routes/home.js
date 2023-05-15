@@ -4,7 +4,7 @@ const db = require('../db/index');
 let alert = require('alert');
 
 
-homeRouter.get('/:user_id', (req, res, next) => {
+/*homeRouter.get('/:user_id', (req, res, next) => {
   const user_id = req.params.user_id;
   db.query(`SELECT * FROM users WHERE user_id = $1`, [user_id], (err, user_result) => {
     if (err) {
@@ -89,6 +89,6 @@ homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
    
   res.render('view-post', {posts: post_result.rows, user_id: user_id});
 });
-});
+});*/
 
 module.exports = homeRouter;
