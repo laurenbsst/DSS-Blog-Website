@@ -1,14 +1,15 @@
-const speakeasy = require("speakeasy")
-const express = require("express")
-const tfa = express()
-const loginRouter = require('../routes/login')
-const homeRouter = require('../routes/home')
+const speakeasy = require("speakeasy");
+const express = require("express");
+const tfa = express();
+const loginRouter = require('../routes/login');
+const homeRouter = require('../routes/home');
 const flash = require('express-flash');
 const session = require('express-session');
-const qrcode = require('qrcode')
+const qrcode = require('qrcode');
 const db = require('../db/index');
-var basicAuth = require('express-basic-auth')
-const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
+var basicAuth = require('express-basic-auth');
+const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing");
+let alert = require('alert');
 
 
 var sec = null;
