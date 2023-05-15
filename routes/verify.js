@@ -7,9 +7,13 @@ const flash = require('express-flash');
 const session = require('express-session');
 const qrcode = require('qrcode');
 const db = require('../db/index');
-var basicAuth = require('express-basic-auth');
-const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing");
+var basicAuth = require('express-basic-auth')
+const uuid = require('uuid')
+const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
+const basicAuth = require('express-basic-auth')
+const { verifyPassword, hashedPassword } = require("../public/hashing")
 let alert = require('alert');
+
 
 
 var sec = null;
@@ -33,7 +37,6 @@ loginRouter.get('/', (req, res) => {
     console.log(verify)
 });
 
-
 loginRouter.post('/', (req, res, next) => {
     
 
@@ -52,7 +55,6 @@ loginRouter.post('/', (req, res, next) => {
             var storedPassword = re.rows[0].password;
             if(verifyPassword(password, storedPassword, storedSalt) === true){
                 console.log(loggedin)
-                id = re.rows[0].user_id;
                 res.redirect('/tfa')
                 res.end()
             }
@@ -180,6 +182,7 @@ homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
     
           // Special characters pattern to test against
   var pattern = /[`@^*_+\-=\[\]{}\\|<>\/~]/;
+  const post_id = uuid.v4()
 
   // If search query contains special characters
   if (pattern.test(title)) {
@@ -194,7 +197,7 @@ homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
         return next(err)
       }
   
-    db.query(`INSERT INTO "posts" ("title", "content", "user_id") VALUES ('${title}', '${content}', '${user_id}')`, (err) => {
+    db.query(`INSERT INTO "posts" ("title", "content", "user_id", "post_id") VALUES ('${title}', '${content}', '${user_id}', '${post_id}')`, (err) => {
       if(err) {
         return next(err)
       }
