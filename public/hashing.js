@@ -9,7 +9,7 @@ function generateSalt()
     return crypto.randomBytes(16).toString("hex");
 }
 
-function encryptPassword(plainText, salt)
+function hashPassword(plainText, salt)
 {
     plainText = plainText.concat("f85d0ff9");
     return crypto.pbkdf2Sync(plainText, salt, 1000, 64, 
@@ -18,7 +18,7 @@ function encryptPassword(plainText, salt)
 
 function verifyPassword(enteredPassword, storedPassword, storedSalt)
 {
-    return enteredPassword(encryptPassword(enteredPassword, storedSalt) === storedPassword);
+    return hashPassword(enteredPassword, storedSalt) === storedPassword;
 }
 
-module.exports = {generateSalt, encryptPassword, verifyPassword}
+module.exports = {generateSalt, hashPassword, verifyPassword}

@@ -8,7 +8,7 @@ const session = require('express-session');
 const qrcode = require('qrcode')
 const db = require('../db/index');
 var basicAuth = require('express-basic-auth')
-const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
+const { verifyPassword, hashedPassword } = require("../public/hashing")
 
 
 var sec = null;
@@ -32,7 +32,6 @@ loginRouter.get('/', (req, res) => {
     console.log(verify)
 });
 
-
 loginRouter.post('/', (req, res, next) => {
     
 
@@ -51,7 +50,6 @@ loginRouter.post('/', (req, res, next) => {
             var storedPassword = re.rows[0].password;
             if(verifyPassword(password, storedPassword, storedSalt) === true){
                 console.log(loggedin)
-                id = re.rows[0].user_id;
                 res.redirect('/tfa')
                 res.end()
             }
