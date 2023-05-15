@@ -16,18 +16,21 @@ app.get('/', (req, res, next) => {
 const createAccountRouter = require('./routes/create-account');
 const homeRouter = require('./routes/home');
 const tfa = require('./routes/verify')
-
+const loginRouter = require('./routes/login')
 
 app.use('/create-account', createAccountRouter);
 app.use('/tfa', tfa)
 app.use('/home', homeRouter);
-
+app.use('/', loginRouter)
 
 app.post('/create-account', createAccountRouter)
 app.post('/tfa', tfa)
+app.post('/', loginRouter)
 
 
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server is running on port 5000');
 });
+
+module.exports = app;

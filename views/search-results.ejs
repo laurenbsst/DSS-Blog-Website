@@ -37,17 +37,9 @@
         <div class="main-content-box">
           <div class="header">
               <h3 class="main-title">Hello, <%= user.username %> !</h3>
-              <a href="<%=user.user_id %>/new-post">
-              <button class="new-post">New post</button>
               </a>
           </div>
-          <div class="search-container">
-            <form action="<%=user.user_id %>/search" method="post">
-              <input type="text" id="search" placeholder="Search for a post..." name="search">
-              <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
-            </form>
-          </div>
-          <h5 id="posts-title">My posts</h5>
+          <h5 id="posts-title">You searched for: '<%=search%>'</h5>
           <div class="row">
             <% posts.forEach(post => { %>
               <div class="col-md-4 col-12 d-flex justify-content-center">
