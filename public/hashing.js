@@ -4,18 +4,21 @@ Last updated 10/05/2023*/
 
 var crypto = require("crypto");
 
-export function generateSalt() 
+function generateSalt() 
 {
     return crypto.randomBytes(16).toString("hex");
 }
 
-export function encryptPassword(plainText, salt)
+function encryptPassword(plainText, salt)
 {
+    plainText = plainText.concat("f85d0ff9");
     return crypto.pbkdf2Sync(plainText, salt, 1000, 64, 
         "sha512").toString("hex");
 }
 
-export function verifyPassword(enteredPassword, storedPassword, storedSalt)
+function verifyPassword(enteredPassword, storedPassword, storedSalt)
 {
     return enteredPassword(encryptPassword(enteredPassword, storedSalt) === storedPassword);
 }
+
+module.exports = {generateSalt, encryptPassword, verifyPassword}

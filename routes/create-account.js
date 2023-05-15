@@ -8,7 +8,7 @@ const db = require('../db/index');
 const qrcode = require('qrcode')
 const jwt = require('jsonwebtoken')
 const { expressjwt: jw } = require('express-jwt')
-import { generateSalt, encryptPassword, verifyPassword } from '../public/hashing';
+var {generateSalt, encryptPassword, verifyPassword } = require('../public/hashing');
 
 
 createAccountRouter.get('/', (req, res) => {
