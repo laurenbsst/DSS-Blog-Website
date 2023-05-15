@@ -1,15 +1,19 @@
-const speakeasy = require("speakeasy")
-const express = require("express")
-const tfa = express()
-const loginRouter = require('../routes/login')
-const homeRouter = require('../routes/home')
+const speakeasy = require("speakeasy");
+const express = require("express");
+const tfa = express();
+const loginRouter = require('../routes/login');
+const homeRouter = require('../routes/home');
 const flash = require('express-flash');
 const session = require('express-session');
-const qrcode = require('qrcode')
+const qrcode = require('qrcode');
 const db = require('../db/index');
 var basicAuth = require('express-basic-auth')
 const uuid = require('uuid')
 const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
+const basicAuth = require('express-basic-auth')
+const { verifyPassword, hashedPassword } = require("../public/hashing")
+let alert = require('alert');
+
 
 
 var sec = null;
@@ -33,7 +37,6 @@ loginRouter.get('/', (req, res) => {
     console.log(verify)
 });
 
-
 loginRouter.post('/', (req, res, next) => {
     
 
@@ -52,7 +55,6 @@ loginRouter.post('/', (req, res, next) => {
             var storedPassword = re.rows[0].password;
             if(verifyPassword(password, storedPassword, storedSalt) === true){
                 console.log(loggedin)
-                id = re.rows[0].user_id;
                 res.redirect('/tfa')
                 res.end()
             }

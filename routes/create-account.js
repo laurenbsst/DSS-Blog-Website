@@ -6,8 +6,9 @@ const session = require('express-session');
 const flash = require('express-flash');
 const db = require('../db/index');
 const qrcode = require('qrcode')
-const uuid = require('uuid')
-const {generateSalt, encryptPassword, verifyPassword } = require('../public/hashing');
+const jwt = require('jsonwebtoken')
+const { expressjwt: jw } = require('express-jwt')
+const {generateSalt, hashPassword } = require('../public/hashing');
 
 
 createAccountRouter.get('/', (req, res) => {
@@ -48,7 +49,7 @@ createAccountRouter.post('/create-account', (req, res) => {
 
 
     let salt = generateSalt();
-    let encryptedPassword = encryptPassword(password, salt);
+    let hashedPassword = hashPassword(password, salt);
 
     db.query( 
         `INSERT INTO users (user_id, username, email, password, salt, secret) 
