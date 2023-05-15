@@ -8,6 +8,7 @@ const db = require('../db/index');
 const qrcode = require('qrcode')
 const jwt = require('jsonwebtoken')
 const { expressjwt: jw } = require('express-jwt')
+var {generateSalt, encryptPassword, verifyPassword } = require('../public/hashing');
 
 
 createAccountRouter.get('/', (req, res) => {
@@ -46,12 +47,13 @@ createAccountRouter.post('/create-account', (req, res) => {
     )
 
 
-    
-    
+    let salt = generateSalt();
+    let encryptedPassword = encryptPassword(password, salt);
+
     db.query( 
-        `INSERT INTO users (username, email, password, secret) 
+        `INSERT INTO users (username, email, password, salt, secret) 
         VALUES ($1, $2, $3, $4)
-        RETURNING user_id, password`, [username, email, password, secret.base32], (err, results) => {
+        RETURNING user_id, password`, [username, email, encryptedPassword, salt, secret.base32], (err, results) => {
             if (err){
                 throw err
             }

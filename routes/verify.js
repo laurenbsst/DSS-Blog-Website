@@ -8,6 +8,7 @@ const session = require('express-session');
 const qrcode = require('qrcode')
 const db = require('../db/index');
 var basicAuth = require('express-basic-auth')
+const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
 
 
 var sec = null;
@@ -33,45 +34,33 @@ loginRouter.get('/', (req, res) => {
 
 
 loginRouter.post('/', (req, res, next) => {
-
+    
 
     let { username, password } = req.body
 
-    db.query(`SELECT * FROM users WHERE username = $1 AND password = $2`, [username, password], (err, re) => { 
-        
+    db.query('SELECT * FROM users WHERE username = $1', [username], (err, re) => {
+
         if(re.rows[0] === undefined){
+           wait(28)
             res.redirect('/')
         }
-        
         else {
-            id = re.rows[0].user_id
+            id = re.rows[0].user_id;
             
-            console.log(id)
-
-            db.query(`SELECT username, password FROM users WHERE user_id = $1`, [id], (err, result) => {
-                if(err) {
-                    return next(err)
-                }
-        
-                user = result.rows[0].username
-                pass = result.rows[0].password
-                
-            
-
-                if (username == user && password == pass){
-                    res.redirect('/tfa')
-                    res.end()
-                }
-                else {
-                    res.redirect('/')
-                    res.end()
-                }
-                
-            })
+            let storedSalt = re.rows[0].salt;
+            var storedPassword = re.rows[0].password;
+            if(verifyPassword(password, storedPassword, storedSalt) === true){
+                console.log(loggedin)
+                id = re.rows[0].user_id;
+                res.redirect('/tfa')
+                res.end()
+            }
+            else {
+                 res.redirect('/')       
+            }
         }
     })
 })
-
 
 
 tfa.get('/', (req, res, next) => {
