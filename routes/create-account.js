@@ -6,9 +6,8 @@ const session = require('express-session');
 const flash = require('express-flash');
 const db = require('../db/index');
 const qrcode = require('qrcode')
-const jwt = require('jsonwebtoken')
-const { expressjwt: jw } = require('express-jwt')
-var {generateSalt, encryptPassword, verifyPassword } = require('../public/hashing');
+const uuid = require('uuid')
+const {generateSalt, encryptPassword, verifyPassword } = require('../public/hashing');
 
 
 createAccountRouter.get('/', (req, res) => {
@@ -28,6 +27,7 @@ createAccountRouter.use(session({
 createAccountRouter.post('/create-account', (req, res) => {
     let { username, email, password, confirmpassword } = req.body;
 
+    const id = uuid.v4()
     const secret = speakeasy.generateSecret()
 
     console.log({
@@ -51,9 +51,9 @@ createAccountRouter.post('/create-account', (req, res) => {
     let encryptedPassword = encryptPassword(password, salt);
 
     db.query( 
-        `INSERT INTO users (username, email, password, salt, secret) 
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING user_id, password`, [username, email, encryptedPassword, salt, secret.base32], (err, results) => {
+        `INSERT INTO users (user_id, username, email, password, salt, secret) 
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING user_id, password`, [id, username, email, encryptedPassword, salt, secret.base32], (err, results) => {
             if (err){
                 throw err
             }

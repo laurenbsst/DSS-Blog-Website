@@ -8,6 +8,7 @@ const session = require('express-session');
 const qrcode = require('qrcode')
 const db = require('../db/index');
 var basicAuth = require('express-basic-auth')
+const uuid = require('uuid')
 const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
 
 
@@ -179,6 +180,7 @@ homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
     
           // Special characters pattern to test against
   var pattern = /[`@^*_+\-=\[\]{}\\|<>\/~]/;
+  const post_id = uuid.v4()
 
   // If search query contains special characters
   if (pattern.test(title)) {
@@ -193,7 +195,7 @@ homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
         return next(err)
       }
   
-    db.query(`INSERT INTO "posts" ("title", "content", "user_id") VALUES ('${title}', '${content}', '${user_id}')`, (err) => {
+    db.query(`INSERT INTO "posts" ("title", "content", "user_id", "post_id") VALUES ('${title}', '${content}', '${user_id}', '${post_id}')`, (err) => {
       if(err) {
         return next(err)
       }
