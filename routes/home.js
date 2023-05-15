@@ -15,7 +15,8 @@ homeRouter.get('/:user_id', (req, res, next) => {
     if (err) {
       return next(err)
     }
-    
+   
+  res.status(200);
   res.render('home', {users: user_result.rows, posts: post_result.rows});
 });
 });
@@ -50,8 +51,9 @@ homeRouter.post('/:user_id/new-post/submit', (req, res, next) => {
         return next(err)
       }
 
+    res.status(201);
     alert("New post successfully created!");
-    res.render('home', {users: user_result.rows, posts: post_result.rows });
+    res.redirect('/home/' + user_id);
   });
 });
 });
@@ -60,21 +62,23 @@ homeRouter.post('/:user_id/search', (req, res, next) => {
   const user_id = req.params.user_id;
   const search = req.body.search;
 
+  var first_char = search.charAt(0);
+
   db.query(`SELECT * FROM users WHERE user_id = $1`, [user_id], (err, user_result) => {
     if (err) {
       return next(err)
     }
 
-  db.query(`SELECT * FROM posts WHERE title = $1 AND user_id = $2`, [search, user_id], (err, post_result) => {
+  db.query(`SELECT * FROM posts WHERE title LIKE '${first_char}%'`, (err, post_result) => {
     if(err) {
       return next(err)
     }
-    res.render('home', {users: user_result.rows, posts: post_result.rows});
+    res.render('search-results', {users: user_result.rows, posts: post_result.rows, search: search});
   });
 });
 });
 
-homeRouter.get('/:user_id/:post_id', (req, res, next) => {
+homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
   const user_id = req.params.user_id;
   const post_id = req.params.post_id;
 
@@ -83,7 +87,7 @@ homeRouter.get('/:user_id/:post_id', (req, res, next) => {
       return next(err)
     }
    
-  res.render('view-post', {posts: post_result.rows});
+  res.render('view-post', {posts: post_result.rows, user_id: user_id});
 });
 });
 

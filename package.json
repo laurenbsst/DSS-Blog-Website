@@ -4,7 +4,8 @@
   "description": "blog website for dss module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "mocha test"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,8 @@
   "homepage": "https://github.com/laurenbsst/DSS-Blog-Website#readme",
   "dependencies": {
     "alert": "^5.1.4",
-    "connect-ensure-login": "^0.1.1",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
@@ -29,6 +31,7 @@
     "express-jwt": "^8.4.1",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
@@ -37,5 +40,8 @@
     "qrcode": "^1.5.3",
     "qrcode-reader": "^1.0.4",
     "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }
