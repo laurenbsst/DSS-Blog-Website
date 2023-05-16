@@ -34,6 +34,7 @@
       <div class="tfa-box">
         <h3 class="title">Validate</h3>
         <form action="/tfa" method="POST">
+          <p>Please scan the QR code below with an authenticator app (e.g. Microsoft Authenticator) so that we can verify your identity.</p>
           <img src="<%- qr %>" class="img-fluid"/>
           <label for="code">One Time Password:</label>
           <input type="text" name="code" maxlength="6" minlength="6" required>
