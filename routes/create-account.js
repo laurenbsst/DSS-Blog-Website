@@ -11,14 +11,11 @@ const { expressjwt: jw } = require('express-jwt')
 const {generateSalt, hashPassword } = require('../public/hashing');
 const uuid = require('uuid');
 const {encryptData, decryptData} = require('../public/encryption');
-const uuid = require('uuid')
 let alert = require('alert');
 
 createAccountRouter.get('/', (req, res) => {
     res.render('create-account');
 });
-
-
 
 createAccountRouter.use(flash())
 

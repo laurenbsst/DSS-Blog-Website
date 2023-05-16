@@ -262,49 +262,58 @@ homeRouter.post('/:user_id/search', (req, res, next) => {
 homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
     const user_id = req.params.user_id;
     const post_id = req.params.post_id;
-    
+
+    if(verify) {
     // Get the post they want to view from the database
     db.query(`SELECT * FROM posts WHERE post_id = $1`, [post_id], (err, post_result) => {
-      if (err) {
-        return next(err)
-      }
-      // Get the user of the post they want to view
-      db.query(`SELECT user_id FROM posts WHERE post_id = $1`, [post_id], (err, user_result) => {
-        const id = user_result.rows[0].user_id;
-  
-        db.query(`SELECT * FROM users WHERE user_id = $1`, [id], (err, final_user_result) => {
-          if (err) {
-            return next(err)
-          }
         if (err) {
           return next(err)
         }
+        // Get the user of the post they want to view
+        db.query(`SELECT user_id FROM posts WHERE post_id = $1`, [post_id], (err, user_result) => {
+          const id = user_result.rows[0].user_id;
+    
+          db.query(`SELECT * FROM users WHERE user_id = $1`, [id], (err, final_user_result) => {
+            if (err) {
+              return next(err)
+            }
+          if (err) {
+            return next(err)
+          }
+          
+          // If the post belongs to the user, render the view screen with edit features
+          if(id == user_id) {
+              res.render('view-post-edit', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
+          }
+          else {
+              // If the post doesn't belong to the user, render the view screen WITHOUT edit features
+              res.render('view-post-no-edit', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
+          }
+    });
+    });
+    });
+    }
+    else {
+        res.redirect('/');
+    }
+    
+  });
 
-        if(id == user_id) {
-            // Render the view post screen with the fetched post, user that created it and id of currently logged in user
-            res.render('view-post-edit', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
-        }
-        else {
-            // Render the view post screen with the fetched post, user that created it and id of currently logged in user
-            res.render('view-post-no-edit', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
-        }
-  });
-  });
-  });
-  });
-
-// Updating a post
+// Editing a post
 homeRouter.post('/:user_id/:post_id/view/update', (req, res, next) => {
     const user_id = req.params.user_id;
     const post_id = req.params.post_id;
 
+    // If user is verified...
     if(verify){
         const content = req.body.content;
 
+        // Update contents of post in the database
         db.query('UPDATE posts SET content = $1 WHERE post_id = $2', [content, post_id], (err) => {
             if (err) {
                 return next(err)
             }
+            // Alert the user that post editing was successful and redirect them back to home
             alert('Post successfully edited!');
             res.redirect('/home/' + user_id);
         })
