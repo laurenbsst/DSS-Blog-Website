@@ -9,6 +9,7 @@ const qrcode = require('qrcode')
 const jwt = require('jsonwebtoken')
 const { expressjwt: jw } = require('express-jwt')
 const {generateSalt, hashPassword } = require('../public/hashing');
+const uuid = require('uuid');
 const {encryptData, decryptData} = require('../public/encryption');
 
 createAccountRouter.get('/', (req, res) => {
