@@ -1,0 +1,16 @@
+.tfa-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1%;
+    background-color: #FAF9F6;
+    width: 500px;
+    height: 600px;
+    margin-top: 60px;
+}
+img {
+    margin-left: 35px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
