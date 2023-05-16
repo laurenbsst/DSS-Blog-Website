@@ -10,7 +10,7 @@ const db = require('../db/index');
 const uuid = require('uuid')
 //const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
 const basicAuth = require('express-basic-auth')
-const { verifyPassword, hashedPassword } = require("../public/hashing")
+const { verifyPassword } = require("../public/hashing")
 let alert = require('alert');
 
 var sec = null;
@@ -39,16 +39,18 @@ loginRouter.post('/', (req, res, next) => {
 
     // Identify that the user exists in the database when given a username
     db.query('SELECT * FROM users WHERE username = $1', [username], (err, re) => {
-
-        // If user doesn't exist, redirect them back to the login screen
+        //If there is no user with this username, wait 28 milliseconds and inform user that login failed. 
         if(re.rows[0] === undefined){
-           wait(28)
+            //Reason for 28 milliseconds is to protect against account enumeration by ensuring that there is 
+                //as minimal time difference between different incorrect login details.
+            wait(28)
             res.redirect('/')
         }
         else {
             // If user exists, fetch the id, stored salt and password
             id = re.rows[0].user_id;
             let storedSalt = re.rows[0].salt;
+            //Looks at the stored password
             var storedPassword = re.rows[0].password;
             // Verify if the entered password and stored salt matches what's stored in the database
             if(verifyPassword(password, storedPassword, storedSalt) === true){
