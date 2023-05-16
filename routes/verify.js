@@ -277,11 +277,41 @@ homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
         if (err) {
           return next(err)
         }
-    // Render the view post screen with the fetched post, user that created it and id of currently logged in user
-    res.render('view-post', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
+
+        if(id == user_id) {
+            // Render the view post screen with the fetched post, user that created it and id of currently logged in user
+            res.render('view-post-edit', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
+        }
+        else {
+            // Render the view post screen with the fetched post, user that created it and id of currently logged in user
+            res.render('view-post-no-edit', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
+        }
   });
   });
   });
   });
+
+// Updating a post
+homeRouter.post('/:user_id/:post_id/view/update', (req, res, next) => {
+    const user_id = req.params.user_id;
+    const post_id = req.params.post_id;
+
+    if(verify){
+        const content = req.body.content;
+
+        db.query('UPDATE posts SET content = $1 WHERE post_id = $2', [content, post_id], (err) => {
+            if (err) {
+                return next(err)
+            }
+            alert('Post successfully edited!');
+            res.redirect('/home/' + user_id);
+        })
+    }
+    else {
+        res.redirect('/')
+    }
+
+});
+
 
 module.exports = tfa;
