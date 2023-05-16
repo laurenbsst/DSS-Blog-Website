@@ -42,8 +42,7 @@ loginRouter.post('/', (req, res, next) => {
         if(re.rows[0] === undefined){
             //Reason for 28 milliseconds is to protect against account enumeration by ensuring that there is 
                 //as minimal time difference between different incorrect login details.
-            wait(28)
-            res.redirect('/')
+                setTimeout(() => { res.redirect('/') }, 28);
         }
         else {
             // If user exists, fetch the id, stored salt and password
