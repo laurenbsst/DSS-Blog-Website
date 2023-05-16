@@ -10,7 +10,7 @@ const db = require('../db/index');
 const uuid = require('uuid')
 //const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
 const basicAuth = require('express-basic-auth')
-const { verifyPassword, hashedPassword } = require("../public/hashing")
+const { verifyPassword } = require("../public/hashing")
 let alert = require('alert');
 
 
@@ -42,16 +42,22 @@ loginRouter.post('/', (req, res, next) => {
     let { username, password } = req.body
 
     db.query('SELECT * FROM users WHERE username = $1', [username], (err, re) => {
-
+        //If there is no user with this username, wait 28 milliseconds and inform user that login failed. 
         if(re.rows[0] === undefined){
-           wait(28)
+            //Reason for 28 milliseconds is to protect against account enumeration by ensuring that there is 
+                //as minimal time difference between different incorrect login details.
+            wait(28)
             res.redirect('/')
         }
         else {
+            //id is required for functionality later with different user interactions.
             id = re.rows[0].user_id;
             
+            //Looks at the user's salt.
             let storedSalt = re.rows[0].salt;
+            //Looks at the stored password
             var storedPassword = re.rows[0].password;
+            //Runs the function that compares entered password and the stored password through hashing. If there's a match then the user is advanced to 2FA.
             if(verifyPassword(password, storedPassword, storedSalt) === true){
                 console.log(loggedin)
                 res.redirect('/tfa')

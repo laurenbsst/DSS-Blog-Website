@@ -9,7 +9,7 @@ const qrcode = require('qrcode')
 const jwt = require('jsonwebtoken')
 const { expressjwt: jw } = require('express-jwt')
 const {generateSalt, hashPassword } = require('../public/hashing');
-
+const {encryptData, decryptData} = require('../public/encryption');
 
 createAccountRouter.get('/', (req, res) => {
     res.render('create-account');
@@ -37,11 +37,18 @@ createAccountRouter.post('/create-account', (req, res) => {
         password,
         confirmpassword
     });
-
+    
     db.query(
         `SELECT * FROM users
         WHERE email = $1`, [email], (err, results) => {
+            //Throw error if existing email is found.
             if (err){
+                throw err
+            }
+        },
+        'SELECT * FROM users WHERE username = $1', [username], (err, results) => {
+            //Throw error if existing username is found.
+            if (err) {
                 throw err
             }
         }
@@ -54,7 +61,7 @@ createAccountRouter.post('/create-account', (req, res) => {
     db.query( 
         `INSERT INTO users (user_id, username, email, password, salt, secret) 
         VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING user_id, password`, [id, username, email, encryptedPassword, salt, secret.base32], (err, results) => {
+        RETURNING user_id, password`, [id, username, email, hashedPassword, salt, secret.base32], (err, results) => {
             if (err){
                 throw err
             }
