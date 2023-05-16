@@ -8,7 +8,6 @@ const session = require('express-session');
 const qrcode = require('qrcode');
 const db = require('../db/index');
 const uuid = require('uuid')
-//const { generateSalt, verifyPassword, encryptPassword } = require("../public/hashing")
 const basicAuth = require('express-basic-auth')
 const { verifyPassword } = require("../public/hashing")
 let alert = require('alert');
