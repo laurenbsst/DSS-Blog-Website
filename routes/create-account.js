@@ -52,6 +52,7 @@ createAccountRouter.post('/create-account', (req, res) => {
 
         const id = uuid.v4()
         const secret = speakeasy.generateSecret()
+        let errors = []
 
         console.log({
             username,
@@ -60,6 +61,13 @@ createAccountRouter.post('/create-account', (req, res) => {
             confirmpassword
         });
         
+        if(password != confirmpassword){
+            errors.push({ message: "Passwords do not match" })
+        }
+        if(errors.length > 0) {
+            res.render('create-account', { errors })
+        }
+
         db.query(
             `SELECT * FROM users
             WHERE email = $1`, [email], (err, results) => {
@@ -79,6 +87,7 @@ createAccountRouter.post('/create-account', (req, res) => {
 
         let salt = generateSalt();
         let hashedPassword = hashPassword(password, salt);
+        
 
         db.query( 
             `INSERT INTO users (user_id, username, email, password, salt, secret) 
@@ -87,6 +96,7 @@ createAccountRouter.post('/create-account', (req, res) => {
                 if (err){
                     throw err
                 }
+                
                 console.log(results.rows);
                 req.flash("success", "Account registered. You can now log in")
                 res.redirect('/')
