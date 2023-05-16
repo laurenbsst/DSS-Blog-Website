@@ -32,7 +32,7 @@ loginRouter.get('/', (req, res) => {
     res.render('login');
     console.log(verify)
 });
-
+// When user clicks login button
 loginRouter.post('/', (req, res, next) => {
 
     let { username, password } = req.body
@@ -277,8 +277,8 @@ homeRouter.get('/:user_id/:post_id/view', (req, res, next) => {
         if (err) {
           return next(err)
         }
-    // Render the view post screen with the fetched post and the user that created it
-    res.render('view-post', {posts: post_result.rows, users: final_user_result.rows});
+    // Render the view post screen with the fetched post, user that created it and id of currently logged in user
+    res.render('view-post', {posts: post_result.rows, users: final_user_result.rows, current_id: user_id});
   });
   });
   });
