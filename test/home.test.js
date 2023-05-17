@@ -10,7 +10,7 @@ describe('Home routes', () => {
     // GET requests
     it('Should render home screen with user posts', (done) => {
         chai.request(server)
-        .get('/home/1f2768b7-d50f-4141-ba5c-b388413e9b44')
+        .get('/home/6')
         .end((err, res) => {
             res.should.have.status(200);
             expect(res).to.have.header('content-type', 'text/html; charset=utf-8');
@@ -20,7 +20,7 @@ describe('Home routes', () => {
     })
     it('Should render new post screen', (done) => {
         chai.request(server)
-        .get('/home/1f2768b7-d50f-4141-ba5c-b388413e9b44/new-post')
+        .get('/home/6/new-post')
         .end((err, res) => {
             res.should.have.status(200);
             expect(res).to.have.header('content-type', 'text/html; charset=utf-8');
@@ -30,7 +30,7 @@ describe('Home routes', () => {
     })
     it('Should render view post screen with post content populated', (done) => {
         chai.request(server)
-        .get('/home/1f2768b7-d50f-4141-ba5c-b388413e9b44/e98b35d1-e3b5-42e7-908c-fd17ef88a11e/view')
+        .get('/home/6/1/view')
         .end((err, res) => {
             res.should.have.status(200);
             expect(res).to.have.header('content-type', 'text/html; charset=utf-8');
@@ -47,7 +47,7 @@ describe('Home routes', () => {
         }
 
         chai.request(server)
-        .post('/home/1f2768b7-d50f-4141-ba5c-b388413e9b44/new-post/submit')
+        .post('/home/6/new-post/submit')
         .send(blog_post)
         .end((err, res) => {
             res.should.have.status(200);
@@ -56,21 +56,4 @@ describe('Home routes', () => {
         done();
         })
     })
-    //it('Should create a new account', (done) => {
-        //let account = {
-           // username: 'admin',
-            //email: '1234@gmail.com',
-            //password: '1234',
-            //confirmpassword: '1234'
-        //}
-        //chai.request(server)
-        //.post('/create-account')
-        //.send(account)
-        //.end((err, res) => {
-            //res.should.have.status(500);
-            //expect(res).to.have.header('content-type', 'text/html; charset=utf-8');
-           // res.body.should.be.a('object');
-        //done();
-        //})
-    //})
 })
