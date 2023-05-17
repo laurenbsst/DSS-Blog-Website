@@ -29,27 +29,6 @@ createAccountRouter.post('/create-account', (req, res) => {
     let { username, email, password, confirmpassword } = req.body;
 
 
-    var pattern = /[`@^*_+\-=\[\]{}\\|<>\/~]/;
-    var patternForEmail = /[`^*_+\-=\[\]{}\\|<>\/~]/;
-    // If create-account boxes contains special characters
-    if (pattern.test(username)) {
-        alert('Special characters are not allowed in your username!')
-        res.redirect('/create-account')
-    }
-    else if (patternForEmail.test(email)) {
-        alert('Special characters are not allowed in your email!')
-        res.redirect('/create-account')
-    }
-    else if(pattern.test(password)) {
-        alert('Special characters are not allowed in your password!')
-        res.redirect('/create-account')
-    }
-    else if(pattern.test(confirmpassword)) {
-        alert('Special characters are not allowed in your password!')
-        res.redirect('/create-account')
-    }
-    else {
-
         const id = uuid.v4()
         const secret = speakeasy.generateSecret()
         let errors = []
@@ -75,35 +54,25 @@ createAccountRouter.post('/create-account', (req, res) => {
                 if (err){
                     throw err
                 }
-            },
-            'SELECT * FROM users WHERE username = $1', [username], (err, results) => {
-                //Throw error if existing username is found.
-                if (err) {
-                    throw err
-                }
             }
-        )
-
-
-        let salt = generateSalt();
-        let hashedPassword = hashPassword(password, salt);
-        
-
-        db.query( 
-            `INSERT INTO users (user_id, username, email, password, salt, secret) 
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING user_id, password`, [id, username, email, hashedPassword, salt, secret.base32], (err, results) => {
-                if (err){
-                    throw err
+            );
+    
+    
+            let salt = generateSalt();
+            let hashedPassword = hashPassword(password, salt);
+    
+            db.query( 
+                `INSERT INTO users (user_id, username, email, password, salt, secret) 
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING user_id, password`, [id, username, email, hashedPassword, salt, secret.base32], (err, results) => {
+                    if (err){
+                        throw err
+                    }
+                    console.log(results.rows);
+                    req.flash("success", "Account registered. You can now log in")
+                    res.redirect('/')
                 }
-                
-                console.log(results.rows);
-                req.flash("success", "Account registered. You can now log in")
-                res.redirect('/')
-            }
         )
-    }
-})
-
+    })
 
 module.exports = createAccountRouter;
