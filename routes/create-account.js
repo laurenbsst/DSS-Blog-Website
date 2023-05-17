@@ -31,7 +31,6 @@ createAccountRouter.post('/create-account', (req, res) => {
 
         const id = uuid.v4()
         const secret = speakeasy.generateSecret()
-        let errors = []
 
         console.log({
             username,
@@ -40,39 +39,40 @@ createAccountRouter.post('/create-account', (req, res) => {
             confirmpassword
         });
         
-        if(password != confirmpassword){
-            errors.push({ message: "Passwords do not match" })
-        }
-        if(errors.length > 0) {
-            res.render('create-account', { errors })
-        }
-
-        db.query(
-            `SELECT * FROM users
-            WHERE email = $1`, [email], (err, results) => {
-                //Throw error if existing email is found.
-                if (err){
-                    throw err
-                }
+        if(password.length < 6){
+            alert('Password should be at least 6 characters long!');
+            if(password != confirmpassword){
+                alert('Passwords do not match!');
             }
-            );
-    
-    
-            let salt = generateSalt();
-            let hashedPassword = hashPassword(password, salt);
-    
-            db.query( 
-                `INSERT INTO users (user_id, username, email, password, salt, secret) 
-                VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING user_id, password`, [id, username, email, hashedPassword, salt, secret.base32], (err, results) => {
+        }
+        else {
+            db.query(
+                `SELECT * FROM users
+                WHERE email = $1`, [email], (err, results) => {
+                    //Throw error if existing email is found.
                     if (err){
                         throw err
                     }
-                    console.log(results.rows);
-                    req.flash("success", "Account registered. You can now log in")
-                    res.redirect('/')
                 }
-        )
+                );
+        
+        
+                let salt = generateSalt();
+                let hashedPassword = hashPassword(password, salt);
+        
+                db.query( 
+                    `INSERT INTO users (user_id, username, email, password, salt, secret) 
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                    RETURNING user_id, password`, [id, username, email, hashedPassword, salt, secret.base32], (err, results) => {
+                        if (err){
+                            throw err
+                        }
+                        console.log(results.rows);
+                        alert('Account registered. You can now log in.');
+                        res.redirect('/')
+                    }
+            )
+        }
     })
 
 module.exports = createAccountRouter;
