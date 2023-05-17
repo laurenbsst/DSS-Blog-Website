@@ -73,6 +73,7 @@ loginRouter.post('/', (req, res, next) => {
             }
             else {
                 // If login fails, redirect them back to the login screen
+                alert('Login failed');
                  res.redirect('/')       
             }
         }
