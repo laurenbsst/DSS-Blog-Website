@@ -4,7 +4,7 @@
 Developed by Dovydas
 Last updated 16/05/2023*/
 
-//Assigning 
+//Assigning the library to a variable.
 const CryptoJS = require("crypto-js");
 
 //Key used for encryption. When designing the encryption functionality, the initial target for encryption was email; 
