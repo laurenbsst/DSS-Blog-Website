@@ -27,7 +27,28 @@ createAccountRouter.use(session({
 
 createAccountRouter.post('/create-account', (req, res) => {
     let { username, email, password, confirmpassword } = req.body;
-
+        
+    
+        var pattern = /[`@^*_+\-=\[\]{}\\|<>\/~]/;
+        var patternForEmail = /[`^*_+\-=\[\]{}\\|<>\/~]/;
+        // If create-account boxes contain special characters
+        if (pattern.test(username)) {
+            alert('Special characters are not allowed in your username!')
+            res.redirect('/create-account')
+        }
+        else if (patternForEmail.test(email)) {
+            alert('Special characters are not allowed in your email!')
+            res.redirect('/create-account')
+        }
+        else if(pattern.test(password)) {
+            alert('Special characters are not allowed in your password!')
+            res.redirect('/create-account')
+        }
+        else if(pattern.test(confirmpassword)) {
+            alert('Special characters are not allowed in your password!')
+            res.redirect('/create-account')
+        }
+        else {
 
         const id = uuid.v4()
         const secret = speakeasy.generateSecret()
@@ -70,8 +91,8 @@ createAccountRouter.post('/create-account', (req, res) => {
                         console.log(results.rows);
                         alert('Account registered. You can now log in.');
                         res.redirect('/')
-                    }
-            )
+                    })
+                }
         }
     })
 
