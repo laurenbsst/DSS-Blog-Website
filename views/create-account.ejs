@@ -33,6 +33,13 @@
     <div class="container">
       <div class="create-account-box">
         <h3 class="title">Create an Account</h3>
+        <ul>
+          <% if(typeof errors != 'undefined') { %>
+            <% errors.forEach(error => { %>
+              <li><%= error.message %></li>
+           <% }) %>
+          <% } %>
+        </ul>
         <form action="/create-account" method="POST">
           <label for="username">Username</label>
           <input type="text" name="username" placeholder="johnappleseed123" required>

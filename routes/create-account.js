@@ -28,59 +28,34 @@ createAccountRouter.use(session({
 createAccountRouter.post('/create-account', (req, res) => {
     let { username, email, password, confirmpassword } = req.body;
 
-    if(password.length < 6) {
-        alert('Passwords must be at least 6 characters long!');
-    }
-    if(password != confirmpassword) {
-        alert('Passwords do not match!');
-    }
-    else {
-        var pattern = /[`@^*_+\-=\[\]{}\\|<>\/~]/;
-        var patternForEmail = /[`^*_+\-=\[\]{}\\|<>\/~]/;
-        // If create-account boxes contains special characters
-        if (pattern.test(username)) {
-            alert('Special characters are not allowed in your username!')
-            res.redirect('/create-account')
+
+        const id = uuid.v4()
+        const secret = speakeasy.generateSecret()
+        let errors = []
+
+        console.log({
+            username,
+            email,
+            password,
+            confirmpassword
+        });
+        
+        if(password != confirmpassword){
+            errors.push({ message: "Passwords do not match" })
         }
-        else if (patternForEmail.test(email)) {
-            alert('Special characters are not allowed in your email!')
-            res.redirect('/create-account')
+        if(errors.length > 0) {
+            res.render('create-account', { errors })
         }
-        else if(pattern.test(password)) {
-            alert('Special characters are not allowed in your password!')
-            res.redirect('/create-account')
-        }
-        else if(pattern.test(confirmpassword)) {
-            alert('Special characters are not allowed in your password!')
-            res.redirect('/create-account')
-        }
-        else {
-    
-            const id = uuid.v4()
-            const secret = speakeasy.generateSecret()
-    
-            console.log({
-                username,
-                email,
-                password,
-                confirmpassword
-            });
-            
-            db.query(
-                `SELECT * FROM users
-                WHERE email = $1`, [email], (err, results) => {
-                    //Throw error if existing email is found.
-                    if (err){
-                        throw err
-                    }
-                },
-                'SELECT * FROM users WHERE username = $1', [username], (err, results) => {
-                    //Throw error if existing username is found.
-                    if (err) {
-                        throw err
-                    }
+
+        db.query(
+            `SELECT * FROM users
+            WHERE email = $1`, [email], (err, results) => {
+                //Throw error if existing email is found.
+                if (err){
+                    throw err
                 }
-            )
+            }
+            );
     
     
             let salt = generateSalt();
@@ -97,10 +72,7 @@ createAccountRouter.post('/create-account', (req, res) => {
                     req.flash("success", "Account registered. You can now log in")
                     res.redirect('/')
                 }
-            )
-        }
-    }
-})
-
+        )
+    })
 
 module.exports = createAccountRouter;
