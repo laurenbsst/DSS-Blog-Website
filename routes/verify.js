@@ -37,6 +37,19 @@ loginRouter.post('/', (req, res, next) => {
 
     let { username, password } = req.body
 
+    var pattern = /[`@^*_+\-=\[\]{}\\|<>\/~]/;
+
+    // If create-account boxes contain special characters
+    if (pattern.test(username)) {
+        alert('Special characters are not allowed in your username!')
+        res.redirect('/')
+    }
+    else if(pattern.test(password)) {
+        alert('Special characters are not allowed in your password!')
+        res.redirect('/')
+    }
+    else {
+
     // Identify that the user exists in the database when given a username
     db.query('SELECT * FROM users WHERE username = $1', [username], (err, re) => {
         //If there is no user with this username, wait 28 milliseconds and inform user that login failed. 
@@ -64,6 +77,7 @@ loginRouter.post('/', (req, res, next) => {
             }
         }
     })
+}
 })
 
 
